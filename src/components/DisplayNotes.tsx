@@ -1,36 +1,31 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import NoteCard from "./NoteCard";
 
-const DisplayNotes = () => {
+type DisplayNotesProps = {
+    noteData: any[];
+    updateNoteAppData: (newData: any[]) => void;
+}
+
+const DisplayNotes = ({ noteData, updateNoteAppData }: DisplayNotesProps) => {
     const [notesDisplayed, setNotesDisplayed] = useState(false);
-    const [noteAppData, setNoteAppData] = useState<any[]>([]);
+    // console.log("noteData = ", noteData);
 
-    const updateNoteAppData = (newData: any[]) => {
-        setNoteAppData(newData);
-        localStorage.setItem("noteAppData", JSON.stringify(newData));
-    }
-
-    const doEdit = (title:string, description:string) => {
-        const updatedData = noteAppData.map(note => {
-            if (note.title === title && note.description === description) {
-                return { ...note, edit: !note.edit };
+    const doEdit = (index: number, title: string, description: string) => {
+        // console.log("doEdit called", title, description);
+        const updatedData = noteData.map((note, ind) => {
+            if (ind === index) {
+                return { title, description, edit: !note.edit };
             }
             return note;
         });
         updateNoteAppData(updatedData);
-        localStorage.setItem("noteAppData", JSON.stringify(updatedData));
-    }
-    const doDelete = (title:string, description:string) => {
-        const updatedData = noteAppData.filter(note => !(note.title === title && note.description === description));
-        setNoteAppData(updatedData);
-        updateNoteAppData(updatedData);
-        localStorage.setItem("noteAppData", JSON.stringify(updatedData));
     }
 
-    useEffect(() => {
-        const storedData = localStorage.getItem("noteAppData");
-        setNoteAppData(storedData ? JSON.parse(storedData) : []);
-    }, []);
+    const doDelete = (title: string, description: string) => {
+        // console.log("doDelete called", title, description);
+        const updatedData = noteData.filter(note => !(note.title === title && note.description === description));
+        updateNoteAppData(updatedData);
+    }
 
     return (
         <div className="flex justify-center flex-col min-h-[50vh] items-center">
@@ -40,9 +35,9 @@ const DisplayNotes = () => {
                 {notesDisplayed ? 'Hide' : 'Display'} Notes</button>
 
             <ul className="mt-4 w-full max-w-[650px] flex flex-wrap justify-center gap-2">
-                {notesDisplayed && noteAppData.length > 0 ? (
-                    noteAppData?.map((note: any, index: number) => (
-                        <NoteCard note={note} onEdit={doEdit} onDelete={doDelete} key={index} />
+                {notesDisplayed && noteData.length > 0 ? (
+                    noteData?.map((note: any, index: number) => (
+                        <NoteCard note={note} onEdit={doEdit} onDelete={doDelete} key={index} index={index} />
                     ))
                 ) : notesDisplayed ? (
                     <li className="text-center text-gray-500">No notes available.Add Note</li>

@@ -5,13 +5,13 @@ import { MdDeleteOutline, MdEdit } from "react-icons/md";
 type Note = { title: string; description: string; edit: boolean };
 type NoteCardProps = {
     note: Note;
-    index: number;
-    onDelete: (index: number) => void;
+    onDelete: (newTitle: string, newDescription: string) => void;
     onEdit: (index: number, newTitle: string, newDescription: string) => void;
+    index: number;
 };
 
 
-const NoteCard = ({ note, index, onDelete, onEdit }: NoteCardProps) => {
+const NoteCard = ({ note, onDelete, onEdit, index }: NoteCardProps) => {
     const [title, setTitle] = useState(note.title);
     const [description, setDescription] = useState(note.description);
 
@@ -29,7 +29,7 @@ const NoteCard = ({ note, index, onDelete, onEdit }: NoteCardProps) => {
                         if (note.edit) {
                             onEdit(index, title, description);
                         } else {
-                            onEdit(index, title, description); // This will toggle edit mode in parent
+                            onEdit(index, title, description);
                         }
                     }}
                     className="mt-2 text-sm text-blue-500 cursor-pointer hover:text-blue-700 flex items-center"
@@ -37,7 +37,7 @@ const NoteCard = ({ note, index, onDelete, onEdit }: NoteCardProps) => {
                     {note.edit ? 'Done' : (<><MdEdit className="mr-1" /> Edit</>)}
                 </button>
                 <button
-                    onClick={() => onDelete(index)}
+                    onClick={() => onDelete(title, description)}
                     className="mt-2 text-sm text-red-500 cursor-pointer hover:text-red-700 flex items-center"
                 >
                     <MdDeleteOutline className="mr-1" />

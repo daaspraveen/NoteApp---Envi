@@ -5,28 +5,25 @@ import { useNavigate } from "react-router-dom";
 const Login = () => {
     // localStorage.removeItem("noteAppLogin");
     const isLoggedIn = localStorage.getItem("noteAppLogin");
-    // console.log("isLoggedIn", isLoggedIn);
+    console.log("isLoggedIn", isLoggedIn);
     const navigate = useNavigate();
 
     const [username, setUsername] = useState("praveendas");
     const [password, setPassword] = useState("note123");
     const [showPassword, setShowPassword] = useState(false);
 
-    const donavigate = (path: string) => {
-        // console.log("Navigate function called");
-        navigate(path);
-    }
-
-    const doLogin = (e: React.FormEvent) => {
+    const doLogin = (e: any) => {
         e.preventDefault();
-        // console.log("Login function called");
+        console.log("Login function called");
         localStorage.setItem("noteAppLogin", "true");
-        donavigate('/');
+        navigate('/');
     };
 
     useEffect(() => {
-        if (isLoggedIn === "true") donavigate('/')
-    }, [isLoggedIn]);
+        if (isLoggedIn === "true") {
+            navigate('/');
+        }
+    }, [isLoggedIn, navigate]);
 
     return (
         <>
@@ -55,7 +52,7 @@ const Login = () => {
                                 </button>
                             </span>
                         </div>
-                        <button type="submit" className="w-full bg-blue-400 cursor-pointer hover:bg-blue-600 text-white py-2 px-4 rounded-md transition-all duration-200">Login</button>
+                        <button type="submit" className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md transition-all duration-200">Login</button>
                     </form>
                 </div>
             </section>

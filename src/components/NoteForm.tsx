@@ -1,20 +1,17 @@
 import { useState } from "react";
 
-const NoteForm = () => {
+type NoteFormProps = {
+    addNoteFunc: (title: string,description: string) => void;
+};
+
+const NoteForm = ({ addNoteFunc }: NoteFormProps) => {
+
     const [noteTitle, setNoteTitle] = useState("");
     const [notedescription, setNotedescription] = useState("");
 
-    const  doAddNote = (e: React.FormEvent) => {
+    const doAddNote = (e: React.FormEvent) => {
         e.preventDefault();
-        const storedData = localStorage.getItem("noteAppData");
-        const noteAppData = storedData ? JSON.parse(storedData) : [];
-        noteAppData.push({
-            title: noteTitle,
-            description: notedescription,
-            edit: false,
-        });
-        localStorage.setItem("noteAppData", JSON.stringify(noteAppData));
-        console.log(localStorage.getItem("noteAppData"));
+        addNoteFunc(noteTitle, notedescription);
     };
 
     return (
